@@ -1,0 +1,10 @@
+{
+  "npc_id": "lina",
+  "weekday": [
+    {"time": "06:30", "action": "wake", "node": "home_bedroom"},
+    {"time": "08:00", "action": "walk", "node": "town_square"},
+    {"time": "12:00", "action": "work", "node": "shop_counter"},
+    {"time": "19:00", "action": "socialize", "node": "inn"},
+    {"time": "22:00", "action": "sleep", "node": "home_bedroom"}
+  ]
+}
