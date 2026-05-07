@@ -20,4 +20,9 @@ if(COZY_BUILD_TESTS)
   target_link_libraries(simulation_loop_tests PRIVATE cozy_engine)
 
   add_test(NAME simulation_loop_tests COMMAND simulation_loop_tests)
+
+  add_executable(farming_loop_tests tests/farming_loop_tests.cpp)
+  target_link_libraries(farming_loop_tests PRIVATE cozy_engine)
+
+  add_test(NAME farming_loop_tests COMMAND farming_loop_tests)
 endif()
