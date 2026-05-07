@@ -1,6 +1,49 @@
+#include <array>
 #include <iostream>
 
+#include "gameplay/crop_system.hpp"
+#include "gameplay/inventory_system.hpp"
+#include "gameplay/npc_schedule_system.hpp"
+#include "sim/simulation_loop.hpp"
+
 int main() {
+    using namespace cozy;
+
+    sim::SimulationLoop loop(0.05f);
+
+    gameplay::CropComponent crop{.cropId = 1, .hydration = 200, .fertilized = true};
+    gameplay::CropDef cropDef{};
+    cropDef.stageCount = 4;
+    cropDef.growthPerStage[0] = 4;
+    cropDef.growthPerStage[1] = 4;
+    cropDef.growthPerStage[2] = 6;
+
+    gameplay::NpcScheduleComponent npc{
+        .entries = {
+            {360, 10, 1}, // 06:00
+            {720, 22, 2}, // 12:00
+            {1080, 5, 3}  // 18:00
+        }
+    };
+
+    gameplay::Inventory<8> inventory;
+
+    const std::array<float, 3> frameDeltas{0.016f, 0.016f, 0.022f};
+    for (float dt : frameDeltas) {
+        loop.advance(dt, [&](const sim::SimClock& clock) {
+            gameplay::UpdateCrop(crop, cropDef, true);
+            gameplay::EvaluateNpcSchedule(npc, clock.minuteOfDay());
+        });
+    }
+
+    const bool pickedUpSeeds = inventory.add(100, 12, 20);
+
     std::cout << "CozyFarmRPG prototype bootstrap\n";
+    std::cout << "Tick: " << loop.clock.tick << " minute: " << loop.clock.minuteOfDay() << "\n";
+    std::cout << "Crop stage: " << static_cast<int>(crop.stage) << " growth: " << crop.growth
+              << " hydration: " << crop.hydration << "\n";
+    std::cout << "NPC active schedule index: " << npc.activeIndex << "\n";
+    std::cout << "Inventory add seeds: " << (pickedUpSeeds ? "ok" : "full") << "\n";
+
     return 0;
 }
