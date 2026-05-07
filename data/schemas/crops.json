@@ -1,0 +1,8 @@
+{
+  "id": "turnip",
+  "seasons": ["spring"],
+  "stages": [2, 3, 3, 2],
+  "water_need": 4,
+  "fertilizer_bonus": 0.15,
+  "quality_curve": {"base": 0.7, "farming_level_scale": 0.02}
+}

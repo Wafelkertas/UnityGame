@@ -1,0 +1,7 @@
+{
+  "id": "watering_can_basic",
+  "type": "tool",
+  "stackable": false,
+  "max_durability": 100,
+  "actions": ["water_soil"]
+}
