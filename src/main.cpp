@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "gameplay/crop_system.hpp"
+#include "gameplay/economy_system.hpp"
 #include "gameplay/inventory_system.hpp"
 #include "gameplay/npc_schedule_system.hpp"
 #include "sim/simulation_loop.hpp"
@@ -27,6 +28,7 @@ int main() {
     };
 
     gameplay::Inventory<8> inventory;
+    gameplay::Wallet wallet;
 
     const std::array<float, 3> frameDeltas{0.016f, 0.016f, 0.022f};
     for (float dt : frameDeltas) {
@@ -38,12 +40,18 @@ int main() {
 
     const bool pickedUpSeeds = inventory.add(100, 12, 20);
 
+    crop.stage = static_cast<uint8_t>(cropDef.stageCount - 1);
+    const bool harvested = gameplay::HarvestCropToInventory(crop, cropDef, inventory, 200, 5, 20);
+    const bool sold = gameplay::SellItem(inventory, wallet, 200, 4, 15);
+
     std::cout << "CozyFarmRPG prototype bootstrap\n";
     std::cout << "Tick: " << loop.clock.tick << " minute: " << loop.clock.minuteOfDay() << "\n";
     std::cout << "Crop stage: " << static_cast<int>(crop.stage) << " growth: " << crop.growth
               << " hydration: " << crop.hydration << "\n";
     std::cout << "NPC active schedule index: " << npc.activeIndex << "\n";
     std::cout << "Inventory add seeds: " << (pickedUpSeeds ? "ok" : "full") << "\n";
+    std::cout << "Harvested produce: " << (harvested ? "yes" : "no") << " sold produce: " << (sold ? "yes" : "no") << "\n";
+    std::cout << "Wallet gold: " << wallet.gold << "\n";
 
     return 0;
 }
