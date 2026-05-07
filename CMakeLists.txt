@@ -12,3 +12,12 @@ target_include_directories(cozy_engine INTERFACE src)
 
 add_executable(cozy_game src/main.cpp)
 target_link_libraries(cozy_game PRIVATE cozy_engine)
+
+if(COZY_BUILD_TESTS)
+  enable_testing()
+
+  add_executable(simulation_loop_tests tests/simulation_loop_tests.cpp)
+  target_link_libraries(simulation_loop_tests PRIVATE cozy_engine)
+
+  add_test(NAME simulation_loop_tests COMMAND simulation_loop_tests)
+endif()
